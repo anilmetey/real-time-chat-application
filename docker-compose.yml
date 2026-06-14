@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - JWT_SECRET=production-secret-key-do-not-share
+      - FRONTEND_URL=http://localhost:80
+    volumes:
+      - ./server/database.sqlite:/app/database.sqlite
+      - ./server/uploads:/app/uploads
+    restart: unless-stopped
+
+  client:
+    build: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    restart: unless-stopped
