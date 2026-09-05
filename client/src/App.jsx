@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { io } from 'socket.io-client';
+import { API_URL } from './config';
 import './index.css';
 
 const Login = lazy(() => import('./components/Login'));
@@ -52,7 +53,7 @@ function App() {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/users/me', { credentials: 'include' });
+      const res = await fetch(`${API_URL}/api/users/me`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setCurrentUser(data);
@@ -70,7 +71,7 @@ function App() {
   };
 
   const connectSocket = () => {
-    socket = io('http://localhost:3001', { withCredentials: true });
+    socket = io(API_URL, { withCredentials: true });
 
     socket.on('connect_error', (err) => {
       console.error(err.message);
@@ -123,7 +124,7 @@ function App() {
   };
 
   const handleLogout = async () => {
-    await fetch('http://localhost:3001/api/auth/logout', { method: 'POST', credentials: 'include' });
+    await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
     setIsAuthenticated(false);
     setCurrentUser(null);
     setAuthState('dashboard');
@@ -132,7 +133,7 @@ function App() {
 
   const fetchHistory = async (targetRoom, isInitial = true) => {
     setIsFetchingHistory(true);
-    let url = `http://localhost:3001/api/messages/${targetRoom}?limit=50`;
+    let url = `${API_URL}/api/messages/${targetRoom}?limit=50`;
     
     if (!isInitial && messages.length > 0) {
       const firstRealMsg = messages.find(m => !m.isSystem && m.id);
@@ -188,7 +189,7 @@ function App() {
   const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('http://localhost:3001/api/upload', {
+    const res = await fetch(`${API_URL}/api/upload`, {
       method: 'POST',
       body: formData,
       credentials: 'include'
@@ -205,7 +206,7 @@ function App() {
     if (!file) return;
     const url = await uploadFile(file);
     if (url) {
-      await fetch('http://localhost:3001/api/users/me', {
+      await fetch(`${API_URL}/api/users/me`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ avatarUrl: url }),
@@ -221,7 +222,7 @@ function App() {
     const newName = prompt('Yeni adınızı girin:', currentUser?.username);
     if (!newName || newName.trim() === '' || newName === currentUser?.username) return;
     try {
-      const res = await fetch('http://localhost:3001/api/auth/profile', {
+      const res = await fetch(`${API_URL}/api/auth/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: newName.trim() }),

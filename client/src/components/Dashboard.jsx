@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 
 function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoom, onStartDM, onUpdateAvatar }) {
   const avatarInputRef = useRef(null);
@@ -20,7 +21,7 @@ function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoo
     }
     setIsSearching(true);
     try {
-      const res = await fetch(`http://localhost:3001/api/messages/search/global?q=${e.target.value}`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/api/messages/search/global?q=${e.target.value}`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setSearchResults(data);
@@ -40,7 +41,7 @@ function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoo
 
   const fetchRooms = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/rooms', { credentials: 'include' });
+      const res = await fetch(`${API_URL}/api/rooms`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setGlobalRooms(data);
@@ -52,7 +53,7 @@ function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoo
     e.preventDefault();
     if(!newRoomName.trim()) return;
     try {
-      const res = await fetch('http://localhost:3001/api/rooms', {
+      const res = await fetch(`${API_URL}/api/rooms`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newRoomName.trim(), icon: newRoomIcon }),
@@ -73,7 +74,7 @@ function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoo
     e.stopPropagation();
     if(!window.confirm('Bu odayı silmek istediğinize emin misiniz?')) return;
     try {
-      const res = await fetch(`http://localhost:3001/api/rooms/${roomId}`, {
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -91,7 +92,7 @@ function Dashboard({ currentUser, onlineUsers, unreadCounts, onLogout, onJoinRoo
     if (!newName || newName === currentUser?.username) return;
     
     try {
-      const res = await fetch('http://localhost:3001/api/users/me/username', {
+      const res = await fetch(`${API_URL}/api/users/me/username`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: newName.trim() }),

@@ -15,7 +15,9 @@ const { Op } = require('sequelize');
 const { User, Message, Conversation, Room } = require('./database');
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
 
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(express.json());
@@ -76,7 +78,7 @@ app.post('/api/upload', authMiddleware, (req, res) => {
   upload.single('file')(req, res, (err) => {
     if (err) return res.status(400).json({ error: err.message });
     if (!req.file) return res.status(400).json({ error: 'Dosya yüklenemedi.' });
-    const fileUrl = `http://localhost:3001/uploads/${req.file.filename}`;
+    const fileUrl = `${BACKEND_URL}/uploads/${req.file.filename}`;
     res.json({ url: fileUrl });
   });
 });
@@ -473,7 +475,6 @@ io.on('connection', async (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Masterpiece Server running on port ${PORT}`);
 });

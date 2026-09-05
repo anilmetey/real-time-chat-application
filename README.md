@@ -303,7 +303,7 @@ nexuschat/
 **Anıl Mete**  
 Full-Stack Developer
 
-[![GitHub](https://img.shields.io/badge/GitHub-anilmete-181717?style=for-the-badge&logo=github)](https://github.com/anilmete)
+[![GitHub](https://img.shields.io/badge/GitHub-anilmetey-181717?style=for-the-badge&logo=github)](https://github.com/anilmetey)
 
 </div>
 
@@ -311,7 +311,7 @@ Full-Stack Developer
 
 <div align="center">
 
-**NexusChat v1.0** — All rights reserved © 2025 Anıl Mete  
+**NexusChat v1.0** — All rights reserved © 2025-2026 Anıl Mete  
 Distributed under the MIT License.
 
 </div>

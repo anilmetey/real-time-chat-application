@@ -7,8 +7,9 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
-      - JWT_SECRET=production-secret-key-do-not-share
-      - FRONTEND_URL=http://localhost:80
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:80}
+      - BACKEND_URL=${BACKEND_URL:-http://localhost:3001}
     volumes:
       - ./server/database.sqlite:/app/database.sqlite
       - ./server/uploads:/app/uploads
